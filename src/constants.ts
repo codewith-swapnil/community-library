@@ -14,5 +14,3 @@ export const JWT_MODULE_OPTIONS: JwtModuleOptions = {
     expiresIn: "14d",
   },
 };
-
-

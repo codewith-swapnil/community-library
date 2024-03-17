@@ -1,7 +1,6 @@
 import { InjectQueue } from "@nestjs/bull";
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { TypeOrmCrudService } from "@nestjsx/crud-typeorm";
 import { Queue } from "bull";
 import { CommonService } from "src/common/common.service";
 import { Repository } from "typeorm";
@@ -9,14 +8,13 @@ import { v4 as uuidv4 } from "uuid";
 import { User } from "./users.entity";
 
 @Injectable()
-export class UsersService extends TypeOrmCrudService<User> {
+export class UsersService {
   private repository: Repository<User> = null;
   constructor(
     @InjectRepository(User) usersRepository: Repository<User>,
     private readonly commonService: CommonService,
     @InjectQueue("users-queue") private readonly usersQueue: Queue //private http: HttpService,
   ) {
-    super(usersRepository);
     this.repository = usersRepository;
   }
 
@@ -52,7 +50,7 @@ export class UsersService extends TypeOrmCrudService<User> {
       responseCode: 400,
     };
     try {
-      const findUser1 = await this.repo.findOne({
+      const findUser1 = await this.repository.findOne({
         where: { email: user.email },
       });
 
@@ -89,7 +87,7 @@ export class UsersService extends TypeOrmCrudService<User> {
     };
     try {
       let findUser: User;
-      findUser = await this.repo.findOne({
+      findUser = await this.repository.findOne({
         where: { email: user.email },
       });
 

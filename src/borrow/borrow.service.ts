@@ -1,21 +1,15 @@
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { TypeOrmCrudService } from "@nestjsx/crud-typeorm";
-import { CommonService } from "src/common/common.service";
-import { ILike, Repository, getRepository } from "typeorm";
+import { Repository, getRepository } from "typeorm";
 import { Borrows } from "./borrow.entity";
 
 @Injectable()
-export class BorrowsService extends TypeOrmCrudService<Borrows> {
+export class BorrowsService {
   private repository: Repository<Borrows> = null;
-
   constructor(
     @InjectRepository(Borrows) BorrowsRepository: Repository<Borrows>,
-    private readonly commonService: CommonService
   ) {
-    super(BorrowsRepository);
     this.repository = BorrowsRepository;
-    this.commonService = commonService;
   }
 
   /******* Borrows Controller: Method to add Borrows ******/
@@ -139,7 +133,7 @@ export class BorrowsService extends TypeOrmCrudService<Borrows> {
       books: null,
     };
     try {
-      let books = await getRepository(Borrows)
+      const books = await getRepository(Borrows)
         .createQueryBuilder("borrows")
         .select("borrows.bookId", "bookId")
         .addSelect("COUNT(DISTINCT borrows.userId)", "userCount")
