@@ -135,6 +135,7 @@ export class BorrowsService {
     try {
       const books = await getRepository(Borrows)
         .createQueryBuilder("borrows")
+        .leftJoinAndSelect("borrows.book", "books")
         .select("borrows.bookId", "bookId")
         .addSelect("COUNT(DISTINCT borrows.userId)", "userCount")
         .groupBy("borrows.bookId")
