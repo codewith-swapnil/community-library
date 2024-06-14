@@ -21,7 +21,7 @@ export class BorrowsService {
       borrows: null,
     };
     try {
-      let alredyBorrow = await this.repository.find({ where: { userId: params.userId, bookId: params.bookId } });
+      let alredyBorrow = await this.repository.find({ where: { userId: params.userId, bookId: params.bookId , status: "borrow",} });
 
       if (alredyBorrow.length > 0) {
         response.flash = true;
