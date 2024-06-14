@@ -21,12 +21,21 @@ export class BorrowsService {
       borrows: null,
     };
     try {
-      (params.borrowDateTime = new Date().toISOString()),
-        (params.status = "borrow");
-      response.borrows = await this.repository.save(params);
-      response.flash = true;
-      response.message = "Added New Borrows......";
-      response.responseCode = 200;
+      let alredyBorrow = await this.repository.find({ where: { userId: params.userId, bookId: params.bookId } });
+
+      if (alredyBorrow.length > 0) {
+        response.flash = true;
+        response.message = "Already Borrows Book......";
+        response.responseCode = 200;
+      } else {
+        (params.borrowDateTime = new Date().toISOString()),
+          (params.status = "borrow");
+        response.borrows = await this.repository.save(params);
+        response.flash = true;
+        response.message = "Added New Borrows......";
+        response.responseCode = 200;
+      }
+
     } catch (error) {
       console.log(error);
     }
